@@ -1,0 +1,26 @@
+$CDN: 'https://cdn.eunsatio.io';
+
+@mixin ShadowFocus($color: black) {
+
+  outline: none;
+  transition: box-shadow 300ms;
+
+  &:focus {
+    box-shadow: 0 0 0 3px $color;
+  }
+
+}
+
+@function hex2RGBValues($hex) {
+
+  @return red($hex), green($hex), blue($hex);
+}
+
+@mixin colorMap2Variables($map: (), $prefix: 'color') {
+
+  @each $name, $color in $map {
+    --#{ $prefix }-#{ $name }: #{ $color };
+    --#{ $prefix }-#{ $name }-rgb: #{ hex2RGBValues($color) };
+  }
+
+}

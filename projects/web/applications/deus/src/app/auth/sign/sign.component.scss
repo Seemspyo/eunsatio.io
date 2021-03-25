@@ -1,0 +1,202 @@
+// use variables from src/styles.scss
+@import 'common/@utils.scss';
+
+
+.sign {
+  display: flex;
+  width: 100%; height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+  overflow: { x: hidden; y: auto; }
+  transition: background-size 0s 0.5s; // for animation delay
+  background-size: 0 0;
+
+  &-processing {
+    background: {
+      image: linear-gradient(-45deg, var(--color-background), var(--color-accent), var(--color-background));
+      size: 400% 400%;
+    }
+    animation: {
+      name: wave;
+      duration: 4s;
+      timing-function: linear;
+      iteration-count: infinite;
+    }
+  
+    @keyframes wave {
+  
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+  
+    }
+  }
+
+  &-box {
+    width: 340px;
+    max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 0 26px rgba(#000, 0.1);
+    background-color: var(--color-content-background);
+    padding: 24px;
+    font-size: 16px;
+    overflow: hidden;
+
+    &-header {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &-image {
+        margin-top: 32px;
+        width: 82px; height: 82px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-start;
+        background-color: var(--color-background);
+        border: solid 3px rgba(var(--color-accent-rgb), 0.8);
+
+        img {
+          width: 86%;
+          margin: {
+            top: auto;
+            right: auto;
+          }
+        }
+
+      }
+
+      &-title {
+        margin-top: 18px;
+        font: {
+          size: 1em;
+          weight: 600;
+        }
+        color: var(--color-accent);
+      }
+
+      &-text {
+        margin-top: 6px;
+        letter-spacing: -0.024em;
+        font: {
+          size: 0.9em;
+          weight: 400;
+        }
+        color: rgba(var(--color-accent-rgb), 0.8);
+        text-align: center;
+      }
+
+    }
+
+    &-form {
+      margin: 24px 0 8px;
+      width: 100%;
+
+      $formSize: 52px;
+
+      &-wrapper {
+        width: 100%; height: $formSize;
+        border-radius: $formSize / 2;
+        box-shadow: 0 0 16px rgba(#000, 0.1);
+        display: flex;
+        background-color: var(--color-content-background);
+      }
+
+      &-primary {
+        width: 100%; height: 100%;
+        background-color: var(--color-accent);
+        color: var(--color-text-inverted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: $formSize / 2;
+        font: {
+          size: 1.2em;
+          weight: 600;
+        }
+        flex-shrink: 0;
+        white-space: nowrap;
+
+        @include ShadowFocus(rgba(var(--color-accent-rgb), 0.6));
+
+        transition: {
+          property: box-shadow, width;
+          duration: 300ms;
+        }
+
+      }
+
+      &-input {
+        width: 100%; height: 100%;
+        padding: 12px;
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+
+        input {
+          outline: none;
+          width: 100%;
+          flex-grow: 1;
+          background-color: transparent;
+
+          &:focus {
+            border: solid 1px rgba(var(--color-accent), 0.6);
+          }
+
+        }
+
+      }
+
+      &-submit {
+        height: 100%;
+        padding: 0 1.2em;
+        display: flex;
+        align-items: center;
+        background-color: var(--color-accent);
+        color: var(--color-text-inverted);
+        border-radius: $formSize / 2;
+        font: {
+          size: 0.9em;
+          weight: 500;
+        }
+        flex-shrink: 0;
+        letter-spacing: 0.12em;
+
+        @include ShadowFocus(rgba(var(--color-accent-rgb), 0.6));
+
+      }
+
+      $formSelector: &;
+
+      &:not([state=beforeInput]) {
+
+        #{ $formSelector }-primary {
+          width: $formSize;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+@media (max-width: 380px) {
+
+  .sign {
+
+    &-box {
+      width: 100%;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+  }
+
+}

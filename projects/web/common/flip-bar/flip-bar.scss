@@ -1,0 +1,65 @@
+@keyframes progress {
+
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+  
+}
+
+@keyframes flip {
+
+  from {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+
+  to {
+    transform: rotateX(0%);
+    opacity: 1;
+  }
+
+}
+
+.flip-bar {
+  background-color: var(--flip-bar-background-color, white);
+  margin: 16px;
+  padding: 12px 18px;
+  position: relative;
+  max-width: 100%;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  animation: flip 0.5s cubic-bezier(.12,1,.24,1.24) 1;
+  max-width: calc(100% - 32px);
+
+  &-container {
+    display: flex;
+    max-width: 100%;
+  }
+
+  &-content {
+    font: {
+      size: var(--flip-bar-font-size, 1.2em);
+      weight: 300;
+    }
+    white-space: pre-line;
+    overflow-wrap: break-word;
+  }
+
+  &-progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+
+    span {
+      height: 3px;
+      display: block;
+      animation: progress 0s linear 1;
+      background-color: var(--flip-bar-progress-color, lime);
+    }
+
+  }
+
+}

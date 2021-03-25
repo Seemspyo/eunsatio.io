@@ -1,0 +1,37 @@
+{
+  "name": "@eunsatio.io/web",
+  "version": "0.0.0-alpha",
+  "scripts": {
+    "build": "ng build",
+    "watch": "ng build --watch",
+    "build:prod": "ng build --prod",
+    "build:ssr": "ng run deus:server",
+    "watch:ssr": "ng run deus:server --watch",
+    "build:ssr:prod": "ng run deus:server:production",
+    "deus:build": "ng build deus",
+    "deus:watch": "ng build deus --watch",
+    "deus:build:prod": "ng build deus --prod",
+    "deus:build:ssr": "ng run deus:server",
+    "deus:watch:ssr": "ng run deus:server --watch",
+    "deus:build:ssr:prod": "ng run deus:server:prod",
+    "blog:build": "ng build blog",
+    "blog:watch": "ng build blog --watch",
+    "blog:build:prod": "ng build blog --prod",
+    "blog:build:ssr": "ng run blog:server",
+    "blog:watch:ssr": "ng run blog:server --watch",
+    "blog:build:ssr:prod": "ng run blog:server:prod"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/cdk": "^11.2.5",
+    "@angular/forms": "^11.2.6",
+    "@angular/router": "^11.2.6",
+    "@eunsatio.io/server": "^0.0.0-alpha",
+    "@eunsatio.io/util": "^0.0.0",
+    "@fortawesome/angular-fontawesome": "^0.8.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "tslib": "^2.1.0",
+    "zone.js": "^0.11.4"
+  }
+}

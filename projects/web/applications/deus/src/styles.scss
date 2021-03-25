@@ -1,0 +1,40 @@
+@import url(https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap);
+@import '~@angular/cdk/overlay-prebuilt.css';
+@import 'common/@utils';
+
+
+* { margin: 0; border: none; padding: 0; box-sizing: border-box; }
+
+html { width: 100%; height: 100%; }
+body { width: 100%; height: 100%; overflow: hidden; }
+
+input, textarea, select, button, a { font: { size: inherit; weight: inherit; family: inherit; } color: inherit; }
+button, a { cursor: pointer; }
+button { background-color: rgba(#000, 0); }
+a { text-decoration: none; }
+li { list-style-type: none; }
+
+.noto-kr { font-family: 'Noto Sans KR', sans-serif; }
+
+:root {
+
+  @include colorMap2Variables((
+    'background': #f7f7f7,
+    'content-background': #ffffff,
+    'text': #222222,
+    'text-inverted': #efefef,
+    'accent': #60bf91,
+    'inactive': #b4b4b4
+  ));
+
+  --flip-bar-font-size: 16px;
+  --flip-bar-progress-color: var(--color-accent);
+
+  color: var(--color-text);
+
+}
+
+button:disabled {
+  background-color: var(--color-inactive);
+  pointer-events: none;
+}

@@ -1,0 +1,70 @@
+<div class="sign-box">
+
+  <div class="sign-box-header">
+
+    <div class="sign-box-header-image">
+      <img [src]="userPublic?.profileImageUrl || 'assets/images/character.png'">
+    </div>
+
+    <h5 class="sign-box-header-title">Welcome!</h5>
+
+    <span class="sign-box-header-text">
+      <ng-container *ngIf="formState !== 'inputPassword'; else EmailTemplate">We could always use more slackers.</ng-container>
+      <ng-template #EmailTemplate>{{ userPublic!.email }}</ng-template>
+    </span>
+
+  </div>
+
+  <form
+    class="sign-box-form"
+    [attr.state]="formState"
+    [formGroup]="form"
+    (ngSubmit)="onFormSubmit()"
+  >
+
+    <div class="sign-box-form-wrapper">
+
+      <button
+        class="sign-box-form-primary"
+        type="button"
+        (click)="onPrimaryButtonClick()"
+      >
+        <ng-container *ngIf="formState === 'beforeInput'; else InputMode">Sign in</ng-container>
+        <ng-template #InputMode>
+          <fa-icon [icon]="icons.back"></fa-icon>
+        </ng-template>
+      </button>
+
+      <div class="sign-box-form-input" *ngIf="formState !== 'beforeInput'">
+        <input
+          *ngIf="formState === 'inputEmail'"
+          #EmailInput
+          formControlName="emailOrName"
+        >
+        <input
+          *ngIf="formState === 'inputPassword'"
+          #PasswordInput
+          formControlName="password"
+          type="password"
+        >
+      </div>
+
+      <button
+        *ngIf="formState === 'inputEmail'"
+        class="sign-box-form-submit"
+        type="submit"
+        [disabled]="!canCheck()"
+      >Next</button>
+
+      <button
+        *ngIf="formState === 'inputPassword'"
+        class="sign-box-form-submit"
+        type="submit"
+        [disabled]="!canSign()"
+      >Sign in</button>
+
+    </div>
+
+  </form>
+
+</div>

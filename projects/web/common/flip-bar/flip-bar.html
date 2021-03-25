@@ -1,0 +1,12 @@
+<div class="flip-bar">
+
+  <div class="flip-bar-content" aria-live="assertive">
+    <ng-template *ngIf="portal; else TextTemplate" [cdkPortalOutlet]="portal"></ng-template>
+    <ng-template #TextTemplate>{{ content }}</ng-template>
+  </div>
+
+  <div class="flip-bar-progress">
+    <span [style.animation-duration]="options.duration + 'ms'"></span>
+  </div>
+
+</div>

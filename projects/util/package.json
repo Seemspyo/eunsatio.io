@@ -1,0 +1,8 @@
+{
+  "name": "@eunsatio.io/util",
+  "version": "0.0.0",
+  "author": "SeemsPyo <eunsatio@eunsatio.io> (https://eunsatio.io)",
+  "scripts": {
+    "build-lib": "tsc -p tsconfig.json"
+  }
+}

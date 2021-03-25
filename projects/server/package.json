@@ -1,0 +1,52 @@
+{
+  "name": "@eunsatio.io/server",
+  "version": "0.0.0-alpha",
+  "author": "SeemsPyo <eunsatio@eunsatio.io> (https://eunsatio.io)",
+  "main": "api/public-api.js",
+  "scripts": {
+    "build": "webpack --env mode=development --env skipEnv=true",
+    "build:prod": "webpack --env mode=production",
+    "watch": "webpack --watch --env mode=development --env skipEnv=true",
+    "watch:prod": "webpack --watch --env mode=production",
+    "build-lib": "tsc -p tsconfig.lib.json"
+  },
+  "private": true,
+  "dependencies": {
+    "@eunsatio.io/util": "^0.0.0",
+    "@koa/cors": "^3.1.0",
+    "@koa/router": "^10.0.0",
+    "apollo-server-koa": "^2.21.1",
+    "aws-sdk": "^2.866.0",
+    "class-validator": "^0.13.1",
+    "dotenv": "^8.2.0",
+    "graphql-upload": "^11.0.0",
+    "isobject": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compose": "^4.1.0",
+    "koa-compress": "^5.0.1",
+    "mustache": "^4.1.0",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.5.0",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1",
+    "typeorm": "^0.2.31",
+    "googleapis": "^67.1.1",
+    "koa-send": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/graphql-upload": "^8.0.4",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-compress": "^4.0.1",
+    "@types/koa-send": "^4.1.2",
+    "@types/koa__router": "^8.0.4",
+    "@types/mustache": "^4.1.1",
+    "@types/nodemailer": "^6.4.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^8.0.0",
+    "ts-loader": "^8.0.17",
+    "webpack": "^5.24.4",
+    "webpack-cli": "^4.5.0"
+  }
+}
