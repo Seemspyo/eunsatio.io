@@ -1,6 +1,8 @@
 {
   "name": "@eunsatio.io/web",
   "version": "0.0.0-alpha",
+  "author": "SeemsPyo <eunsatio@eunsatio.io> (https://eunsatio.io)",
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "build": "ng build",
     "watch": "ng build --watch",

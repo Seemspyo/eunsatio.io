@@ -4,6 +4,7 @@
   "workspaces": [
     "projects/*"
   ],
+  "license": "GPL-3.0-only",
   "scripts": {
     "build": "lerna run build --stream",
     "build:prod": "lerna run build:prod --stream",
