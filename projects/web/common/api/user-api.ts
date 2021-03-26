@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '@eunsatio.io/server';
+import { environment } from 'applications/deus/src/environments/env';
 import { GQLClient } from 'common/graphql-client';
 import { PATTERNS_EMAIL } from 'common/patterns/email';
 import gql from 'graphql-tag';
@@ -45,6 +46,11 @@ export class UserAPI {
     return this.graphql.query<{ user: User; }>(query, variables).pipe(
       map(res => res.user)
     );
+  }
+
+  public getProfileImagePlaceholder() {
+
+    return `${ environment.cdnOrigin }/images/profile-0${ Math.ceil(Math.random() * 4) }.jpg`;
   }
 
 }

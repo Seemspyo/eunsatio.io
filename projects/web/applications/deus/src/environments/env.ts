@@ -7,6 +7,7 @@ export const environment = {
 
   production: false,
   apiOrigin: 'https://api.eunatio.io:2800',
+  cdnOrigin: 'https://cdn.eunsatio.io',
   graphqlPath: '/graphql',
   domain: 'eunatio.io'
 

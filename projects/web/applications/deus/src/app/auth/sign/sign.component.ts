@@ -16,6 +16,8 @@ import { PATTERNS_EMAIL } from 'common/patterns/email';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { asyncScheduler } from 'rxjs';
+import { trigger } from '@angular/animations';
+import { fadeEnter, fadeLeave } from 'common/animations/fade';
 
 
 export type SignInFormState = 'beforeInput'|'inputEmail'|'inputPassword';
@@ -27,9 +29,11 @@ export type SignInFormState = 'beforeInput'|'inputEmail'|'inputPassword';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'sign',
-    '[class.sign-processing]': 'processing'
-  }
+    'class': 'sign'
+  },
+  animations: [
+    trigger('fade', [ fadeEnter, fadeLeave ])
+  ]
 })
 export class SignComponent {
 
@@ -53,7 +57,7 @@ export class SignComponent {
   @ViewChild('EmailInput') emailInputRef?: ElementRef<HTMLInputElement>;
   @ViewChild('PasswordInput') passwordInputRef?: ElementRef<HTMLInputElement>;
 
-  public icons = {
+  public readonly icons = {
     back: faAngleLeft
   }
 

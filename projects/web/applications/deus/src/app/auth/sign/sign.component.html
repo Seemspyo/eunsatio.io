@@ -1,3 +1,14 @@
+<div
+  *ngIf="processing"
+  class="sign-processing"
+  [@fade]="{
+    value: true,
+    params: {
+      'transition.fadeEnter': '0.5s 0.5s ease'
+    }
+  }"
+></div>
+
 <div class="sign-box">
 
   <div class="sign-box-header">
