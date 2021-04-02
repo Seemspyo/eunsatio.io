@@ -15,7 +15,8 @@ import { setAuthCookie } from '../../lib/auth/cookie-auth';
 import { Logger } from '../../lib/logger';
 import { config } from '../config/api';
 import { getRepository } from 'typeorm';
-import { User, userRoles } from '../models/user.model';
+import { User } from '../models/user.model';
+import { userRoles } from '../roles/common';
 import { readFile } from 'fs/promises';
 import { render } from 'mustache';
 

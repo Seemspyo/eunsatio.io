@@ -6,8 +6,7 @@ import {
 import {
   BlogArticle,
   BlogComment,
-  User,
-  userRoles
+  User
 } from '../../models';
 import {
   Arg,
@@ -23,7 +22,9 @@ import {
 } from 'type-graphql';
 import { getRepository } from 'typeorm';
 import { GQLContext } from '../../graphql/@graphql';
-import { allUsers, applyPagination, PagingInput } from './@resolver';
+import { applyPagination, PagingInput } from './@resolver';
+import { canManageBlogComments } from '../../roles/blog';
+import { allUsers } from '../../roles/common';
 
 
 @InputType()
@@ -47,12 +48,6 @@ export class BlogCommentUpdateInput {
   content!: string;
 
 }
-
-const canDeleteOthers = [
-  userRoles.deus,
-  userRoles.admin,
-  userRoles.blogAdmin
-]
 
 @Resolver(of => BlogComment)
 export class BlogCommentResolver {
@@ -106,7 +101,7 @@ export class BlogCommentResolver {
     return query.getMany();
   }
 
-  @Authorized(canDeleteOthers)
+  @Authorized(canManageBlogComments)
   @Query(returns => [ BlogComment ])
   getBlogCommentListByAuthor(
     @Arg('authorId') authorId: string,
@@ -221,7 +216,7 @@ export class BlogCommentResolver {
 
     if (comment.author?.id !== user!.id) {
 
-      if (!user!.roles.some(role => canDeleteOthers.includes(role as any))) {
+      if (!user!.roles.some(role => canManageBlogComments.includes(role as any))) {
 
         throw new GQLPermissionError();
       }

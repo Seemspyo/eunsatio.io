@@ -24,7 +24,7 @@ import {
   ListInput,
   PagingInput
 } from './@resolver';
-import { canDelete, canWrite } from './blog-article.resolver';
+import { canWriteBlogArticle, canDeleteBlogArticle } from '../../roles/blog';
 
 
 @InputType()
@@ -82,7 +82,7 @@ export class BlogSeriesResolver {
 
     if (withLocked) {
 
-      if (!user?.roles?.some(role => canWrite.includes(role as any))) {
+      if (!user?.roles?.some(role => canWriteBlogArticle.includes(role as any))) {
 
         throw new GQLPermissionError();
       }
@@ -138,7 +138,7 @@ export class BlogSeriesResolver {
                               .addSelect('article.id')
                               .getOneOrFail();
 
-    if (series.locked && !user?.roles?.some(role => canWrite.includes(role as any))) {
+    if (series.locked && !user?.roles?.some(role => canWriteBlogArticle.includes(role as any))) {
 
       throw new GQLNotFoundError();
     }
@@ -146,7 +146,7 @@ export class BlogSeriesResolver {
     return series;
   }
 
-  @Authorized(canWrite)
+  @Authorized(canWriteBlogArticle)
   @Mutation(returns => BlogSeries)
   createBlogSeries(
     @Arg('input') input: BlogSeriesCreateInput
@@ -156,7 +156,7 @@ export class BlogSeriesResolver {
     return this.seriesRepo.save(series);
   }
 
-  @Authorized(canWrite)
+  @Authorized(canWriteBlogArticle)
   @Mutation(returns => BlogSeries)
   async updateBlogSeries(
     @Arg('id') id: string,
@@ -172,7 +172,7 @@ export class BlogSeriesResolver {
     return await this.seriesRepo.save(Object.assign(series, input));
   }
 
-  @Authorized(canDelete)
+  @Authorized(canDeleteBlogArticle)
   @Mutation(returns => Boolean)
   async deleteBlogSeries(
     @Arg('id') id: string

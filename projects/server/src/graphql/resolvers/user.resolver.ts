@@ -6,9 +6,7 @@ import {
 } from '../../errors';
 import {
   User,
-  userProviders,
-  UserRole,
-  userRoles
+  userProviders
 } from '../../models';
 import {
   Arg,
@@ -23,12 +21,17 @@ import {
 import { Brackets, getRepository } from 'typeorm';
 import { GQLContext } from '../../graphql/@graphql';
 import {
-  allUsers,
   applyPagination,
   createSearchQueryBuilder,
   ListInput,
   PagingInput
 } from './@resolver';
+import {
+  userRoles,
+  UserRole,
+  allUsers,
+  canManageUsers
+} from '../../roles/common';
 
 
 @InputType()
@@ -67,11 +70,6 @@ export class UserUpdateInput {
   profileImageUrl?: string;
 
 }
-
-const canAlterOthers = [
-  userRoles.deus,
-  userRoles.admin
-]
 
 @Resolver(of => User)
 export class UserResolver {
@@ -127,7 +125,7 @@ export class UserResolver {
     return query.getOneOrFail();
   }
 
-  @Authorized(canAlterOthers)
+  @Authorized(canManageUsers)
   @Query(returns => [ User ])
   getUserList(
     @Arg('sort', { defaultValue: {} }) sort: ListInput,
@@ -160,7 +158,7 @@ export class UserResolver {
     return query.getMany();
   }
 
-  @Authorized(canAlterOthers)
+  @Authorized(canManageUsers)
   @Query(returns => User, {
     description: 'get user by `id`. to get an information of the signed user, use `query { me }` instead.'
   })
@@ -176,7 +174,7 @@ export class UserResolver {
     .getOneOrFail();
   }
 
-  @Authorized(canAlterOthers)
+  @Authorized(canManageUsers)
   @Mutation(returns => User)
   async createUser(
     @Ctx() { auth }: GQLContext,
@@ -242,7 +240,7 @@ export class UserResolver {
 
     const
     isDeus = user!.roles.includes(userRoles.deus),
-    isAdmin = user!.roles.some(role => canAlterOthers.includes(role as any));
+    isAdmin = user!.roles.some(role => canManageUsers.includes(role as any));
 
     if (user!.id !== id) {
 
@@ -252,7 +250,7 @@ export class UserResolver {
       }
 
       // only god can update other admins
-      if (updatee.roles.some(role => canAlterOthers.includes(role as any)) && !isDeus) {
+      if (updatee.roles.some(role => canManageUsers.includes(role as any)) && !isDeus) {
 
         throw new GQLPermissionError();
       }
@@ -266,7 +264,7 @@ export class UserResolver {
         throw new GQLPermissionError();
       }
 
-      if (input.roles.some(role => canAlterOthers.includes(role as any)) && !isDeus) {
+      if (input.roles.some(role => canManageUsers.includes(role as any)) && !isDeus) {
 
         throw new GQLPermissionError();
       }
@@ -287,7 +285,7 @@ export class UserResolver {
     return await this.userRepo.save(Object.assign(updatee, input));
   }
 
-  @Authorized(canAlterOthers)
+  @Authorized(canManageUsers)
   @Mutation(returns => Boolean, { description: 'returns current state' })
   async blockUser(
     @Ctx() { user }: GQLContext,
@@ -331,7 +329,7 @@ export class UserResolver {
     return target.blocked;
   }
 
-  @Authorized(canAlterOthers)
+  @Authorized(canManageUsers)
   @Mutation(returns => Boolean, { description: 'returns current state' })
   async unblockUser(
     @Ctx() { user }: GQLContext,

@@ -24,17 +24,8 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 import { SelfValidator } from './@model';
+import { userRoles, UserRole } from '../roles/common';
 
-
-export const userRoles = {
-  deus: 'deus',
-  admin: 'admin',
-  blogAdmin: 'blogAdmin',
-  blogWriter: 'blogWriter',
-  common: 'common'
-} as const;
-
-export type UserRole = ValueOf<typeof userRoles>;
 
 export const userProviders = {
   email: 'email',

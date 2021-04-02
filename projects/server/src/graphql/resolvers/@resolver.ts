@@ -1,4 +1,3 @@
-import { userRoles } from '../../models';
 import { Field, InputType, Int } from 'type-graphql';
 import { Brackets, SelectQueryBuilder } from 'typeorm';
 
@@ -37,8 +36,6 @@ export function applyPagination<T = any>(query: SelectQueryBuilder<T>, { skip, t
 
   return query;
 }
-
-export const allUsers = Object.values(userRoles);
 
 export class SearchQueryBuilder {
 

@@ -13,12 +13,12 @@ import {
 import { getRepository } from 'typeorm';
 import { GQLContext } from '../../graphql/@graphql';
 import {
-  allUsers,
   applyPagination,
   createSearchQueryBuilder,
   ListInput,
   PagingInput
 } from './@resolver';
+import { allUsers } from '../../roles/common';
 
 
 @Resolver(of => BlogBookmark)

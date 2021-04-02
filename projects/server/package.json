@@ -1,6 +1,6 @@
 {
   "name": "@eunsatio.io/server",
-  "version": "0.0.0-alpha",
+  "version": "0.1.0-alpha",
   "author": "SeemsPyo <eunsatio@eunsatio.io> (https://eunsatio.io)",
   "license": "SEE LICENSE IN LICENSE",
   "main": "api/public-api.js",

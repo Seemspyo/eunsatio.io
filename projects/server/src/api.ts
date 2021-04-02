@@ -20,9 +20,9 @@ import { Brackets, createConnection, getRepository } from 'typeorm';
 import {
   entities,
   User,
-  userProviders,
-  userRoles
+  userProviders
 } from './models';
+import { userRoles } from './roles/common';
 import { GQLServer } from './graphql/server';
 
 

@@ -19,7 +19,7 @@ import {
 } from 'type-graphql';
 import { Brackets, getRepository } from 'typeorm';
 import { GQLContext } from '../../graphql/@graphql';
-import { allUsers } from './@resolver';
+import { allUsers } from '../../roles/common';
 
 
 @InputType()

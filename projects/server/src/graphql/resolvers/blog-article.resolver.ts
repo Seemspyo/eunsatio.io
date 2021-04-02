@@ -3,8 +3,7 @@ import { GQLPermissionError } from '../../errors';
 import {
   BlogArticle,
   BlogSeries,
-  User,
-  userRoles
+  User
 } from '../../models';
 import {
   Arg,
@@ -27,6 +26,7 @@ import {
   ListInput,
   PagingInput
 } from './@resolver';
+import { canWriteBlogArticle, canDeleteBlogArticle } from '../../roles/blog';
 
 
 @InputType()
@@ -107,19 +107,6 @@ export class BlogArticleUpdateInput {
 
 }
 
-export const
-canWrite = [
-  userRoles.deus,
-  userRoles.admin,
-  userRoles.blogAdmin,
-  userRoles.blogWriter
-],
-canDelete = [
-  userRoles.deus,
-  userRoles.admin,
-  userRoles.blogAdmin
-]
-
 @Resolver(of => BlogArticle)
 export class BlogArticleResolver {
 
@@ -168,7 +155,7 @@ export class BlogArticleResolver {
 
     if (article.isDraft || article.locked || article.series?.locked) {
 
-      if (!user?.roles?.some(role => canWrite.includes(role as any))) {
+      if (!user?.roles?.some(role => canWriteBlogArticle.includes(role as any))) {
         
         throw new GQLPermissionError();
       }
@@ -178,7 +165,7 @@ export class BlogArticleResolver {
     return article;
   }
 
-  @Authorized(canWrite)
+  @Authorized(canWriteBlogArticle)
   @Query(returns => BlogArticle)
   async getBlogArticleById(
     @Arg('id') id: string
@@ -190,7 +177,7 @@ export class BlogArticleResolver {
     return query.getOneOrFail();
   }
 
-  @Authorized(canWrite)
+  @Authorized(canWriteBlogArticle)
   @Mutation(returns => BlogArticle)
   async createBlogArticle(
     @Ctx() { user }: GQLContext,
@@ -271,7 +258,7 @@ export class BlogArticleResolver {
     return await this.articleRepo.save(Object.assign(article, input));
   }
 
-  @Authorized(canWrite)
+  @Authorized(canWriteBlogArticle)
   @Mutation(returns => BlogArticle)
   async updateBlogArticle(
     @Ctx() { user }: GQLContext,
@@ -306,7 +293,7 @@ export class BlogArticleResolver {
     return await this.articleRepo.save(Object.assign(article, input));
   }
 
-  @Authorized(canDelete)
+  @Authorized(canDeleteBlogArticle)
   @Mutation(returns => Boolean)
   async deleteBlogArticle(
     @Arg('id') id: string
@@ -335,7 +322,7 @@ export class BlogArticleResolver {
 
     if (search.withDraft || search.onlyDraft || search.withLocked) {
 
-      if (!user?.roles?.some(role => canWrite.includes(role as any))) {
+      if (!user?.roles?.some(role => canWriteBlogArticle.includes(role as any))) {
 
         throw new GQLPermissionError();
       }

@@ -13,10 +13,8 @@ import { extname } from 'path';
 import { getRepository } from 'typeorm';
 import { UploadLog, uploadProviders } from '../../models';
 import { GQLContext } from '../../graphql/@graphql';
-import { canWrite } from './blog-article.resolver';
+import { canUploadImage } from '../../roles/common';
 
-
-const canUpload = canWrite;
 
 @Resolver()
 export class UploadResolver {
@@ -31,7 +29,7 @@ export class UploadResolver {
   private bucket = config.s3?.bucket;
   private uploadRepo = getRepository(UploadLog);
 
-  @Authorized(canUpload)
+  @Authorized(canUploadImage)
   @Mutation(returns => UploadLog)
   async uploadImage(
     @Ctx() { user, koaContext }: GQLContext,
