@@ -13,6 +13,7 @@ import { USER_FIELDS } from './user-api';
  * currerntly `initialNavigation: 'enabled'`, which required for angular universal,
  * invokes Router Guards before `APP_INITIALIZER` running.
  * for now, use `CanActivate` on root router instead.
+ * https://github.com/angular/universal/issues/1623
  */
 @Injectable()
 export class AuthAPI implements CanActivate {
