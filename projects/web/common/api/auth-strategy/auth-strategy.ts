@@ -1,7 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import {
   HttpHandler,
-  HttpHeaders,
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
