@@ -28,7 +28,7 @@
     "@angular/cdk": "^11.2.5",
     "@angular/forms": "^11.2.6",
     "@angular/router": "^11.2.6",
-    "@eunsatio.io/server": "^0.0.0-alpha",
+    "@eunsatio.io/server": "^0.1.0-alpha",
     "@eunsatio.io/util": "^0.0.0",
     "@fortawesome/angular-fontawesome": "^0.8.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",

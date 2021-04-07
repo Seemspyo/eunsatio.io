@@ -20,6 +20,7 @@ li { list-style-type: none; }
 
   @include colorMap2Variables((
     'background': #f7f7f7,
+    'background-inverted': #2c343f,
     'content-background': #ffffff,
     'text': #222222,
     'text-inverted': #efefef,

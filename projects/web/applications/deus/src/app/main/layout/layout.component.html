@@ -1,0 +1,202 @@
+<header class="layout-header">
+
+  <div class="layout-header-heading-container">
+
+    <h1 class="layout-header-heading">
+      <a routerLink="/" class="layout-header-heading-wrapper layout-shadow-focus">
+
+        <fa-icon class="layout-header-heading-icon" [icon]="icons.title"></fa-icon>
+
+        <div class="layout-header-heading-text">
+          <span class="layout-header-heading-common">Slacking studio</span>
+          <span class="layout-header-heading-title">Sanctuary</span>
+        </div>
+
+      </a>
+    </h1>
+
+  </div>
+
+  <nav class="layout-header-nav">
+
+    <a
+      *ngFor="let nav of navigationDefs"
+      class="layout-header-nav-button"
+      [class.layout-header-nav-button-active]="!!nav.tree && isCurrentTree(nav.tree)"
+      [routerLink]="nav.link"
+      [queryParams]="nav.queryParams"
+      [queryParamsHandling]="nav.queryParamsHandling"
+      [fragment]="nav.fragment"
+      [preserveFragment]="nav.preserveFragment || false"
+    >{{ nav.label }}</a>
+
+  </nav>
+
+  <div class="layout-header-menu">
+    <button
+      class="layout-header-menu-button layout-shadow-focus"
+      type="button"
+      aria-label="open menu"
+      aria-haspopup="true"
+      [inventorySwitchFor]="inventory"
+    >
+
+      <div class="layout-header-menu-image">
+        <img [src]="user.profileImageUrl || profileImagePlaceholder" [alt]="user.email">
+      </div>
+
+      <fa-icon class="layout-header-menu-icon" [icon]="icons.menu"></fa-icon>
+
+    </button>
+  </div>
+
+</header>
+
+<div class="layout-content">
+
+  <div class="layout-side" [attr.state]="drawerState">
+
+    <button
+      class="layout-side-toggle"
+      type="button"
+      [attr.aria-label]="drawerState === 'expanded' ? 'collapse menu' : 'expand menu'"
+      (click)="markDrawerState(drawerState === 'expanded' ? 'collapsed' : 'expanded')"
+    >
+      <fa-icon
+        class="layout-side-toggle-icon"
+        [icon]="icons.expand"
+      ></fa-icon>
+    </button>
+
+    <div class="layout-side-content">
+
+      <div
+        class="layout-side-node"
+        *ngFor="let node of drawer; let i = index"
+        [class.layout-side-node-prev]="!!drawer[i + 1]?.tree && isCurrentTree(drawer[i + 1].tree!)"
+        [class.layout-side-node-active]="!!node.tree && isCurrentTree(node.tree)"
+        [class.layout-side-node-next]="!!drawer[i - 1]?.tree && isCurrentTree(drawer[i - 1].tree!)"
+      >
+
+        <ng-container *ngTemplateOutlet="Node; context: { $implicit: node }"></ng-container>
+
+      </div>
+
+      <ng-template #Node let-node>
+
+        <ng-container [ngSwitch]="node.type">
+
+          <div
+            *ngSwitchCase="'simple'"
+            class="layout-side-node-simple"
+          >
+            <ng-container *ngTemplateOutlet="NodeContent; context: { $implicit: node }"></ng-container>
+          </div>
+
+          <a
+            *ngSwitchCase="'routerLink'"
+            class="layout-side-node-button"
+            [routerLink]="asRouter(node).link"
+            [queryParams]="asRouter(node).queryParams"
+            [queryParamsHandling]="asRouter(node).queryParamsHandling"
+            [fragment]="asRouter(node).fragment"
+            [preserveFragment]="asRouter(node).preserveFragment || false"
+          >
+            <ng-container *ngTemplateOutlet="NodeContent; context: { $implicit: node }"></ng-container>
+          </a>
+
+          <a
+            *ngSwitchCase="'outerLink'"
+            class="layout-side-node-button"
+            [href]="asOuter(node).href"
+            [target]="asOuter(node).target"
+          >
+            <ng-container *ngTemplateOutlet="NodeContent; context: { $implicit: node }"></ng-container>
+          </a>
+
+          <button
+            *ngSwitchCase="'action'"
+            class="layout-side-node-button"
+            (click)="asAction(node).action($event)"
+          >
+            <ng-container *ngTemplateOutlet="NodeContent; context: { $implicit: node }"></ng-container>
+          </button>
+
+          <!-- <div
+            *ngIf="node.children"
+            class="layout-side-children"
+          >
+            <ng-container *ngFor="let child of node.children">
+              <ng-container *ngTemplateOutlet="Node; context: { $implicit: child }"></ng-container>
+            </ng-container>
+          </div> -->
+
+        </ng-container>
+
+      </ng-template>
+
+      <ng-template #NodeContent let-node>
+
+        <span
+          *ngIf="node.icon"
+          class="layout-side-node-icon"
+          [attr.aria-label]="drawerState === 'collapsed' ? node.label : null"
+        >
+          <fa-icon [icon]="node.icon"></fa-icon>
+        </span>
+
+        <span
+          *ngIf="drawerState === 'expanded'"
+          class="layout-side-node-label"
+          @fade
+        >{{ node.label }}</span>
+
+      </ng-template>
+
+    </div>
+
+  </div>
+
+  <div class="layout-main">
+
+    <ng-content></ng-content>
+
+  </div>
+
+</div>
+
+<inventory #inventory>
+
+  <div class="layout-menu">
+
+    <div class="layout-menu-user">
+
+      <div class="layout-menu-user-profile">
+        <img [src]="user.profileImageUrl || profileImagePlaceholder" [alt]="user.email">
+      </div>
+
+      <div class="layout-menu-user-info">
+
+        <a class="layout-menu-user-info-name" routerLink="/me" inventoryItem>{{ user.username }}</a>
+        <a class="layout-menu-user-info-sub layout-shadow-focus" [href]="'mailto:' + user.email" inventoryItem>{{ user.email }}</a>
+
+      </div>
+
+    </div>
+
+    <div class="layout-menu-action">
+
+      <a class="layout-menu-action-button" routerLink="/me" inventoryItem>Account</a>
+
+      <button
+        class="layout-menu-action-button"
+        type="button"
+        (click)="signOut()"
+        inventoryItem
+      ><fa-icon [icon]="icons.out"></fa-icon> Sign out</button>
+
+    </div>
+
+  </div>
+
+</inventory>

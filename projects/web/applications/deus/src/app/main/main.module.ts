@@ -9,13 +9,20 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InventoryModule } from 'common/inventory';
 
 import { MainComponent } from './main.component';
-import { TopComponent } from './top/top.component';
+import { LayoutComponent } from './layout/layout.component';
+import { DashboardComponent } from './common/dashboard/dashboard.component';
+import { CommonPage } from './pages/common';
+
+import { LayoutStore } from './layout/layout.store';
 
 
 @NgModule({
   declarations: [
     MainComponent,
-    TopComponent
+    LayoutComponent,
+
+    CommonPage,
+    DashboardComponent
   ],
   imports: [
     CommonModule,
@@ -27,6 +34,9 @@ import { TopComponent } from './top/top.component';
     MainRoutingModule,
     FontAwesomeModule,
     InventoryModule
+  ],
+  providers: [
+    LayoutStore
   ]
 })
 export class MainModule { }

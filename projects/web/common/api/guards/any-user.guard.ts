@@ -3,6 +3,7 @@ import {
   ActivatedRouteSnapshot,
   CanActivate,
   CanLoad,
+  Data,
   Route,
   Router
 } from '@angular/router';
@@ -18,18 +19,21 @@ export class AnyUserGuard implements CanActivate, CanLoad {
   ) { }
 
   canLoad(route: Route) {
-    if (!this.auth.authorized) {
-
-      return this.router.parseUrl(route.data?.fallback ?? '/');
-    }
-
-    return true;
+    
+    return this.canPass(route.data);
   }
 
-  canActivate(route: ActivatedRouteSnapshot) {
+  canActivate(snapshot: ActivatedRouteSnapshot) {
+    
+    return this.canPass(snapshot.data);
+  }
+
+  private async canPass(data?: Data) {
+    await this.auth.init(); // workaround for https://github.com/angular/universal/issues/1623
+
     if (!this.auth.authorized) {
 
-      return this.router.parseUrl(route.data.fallback ?? '/');
+      return this.router.parseUrl(data?.fallback ?? '/');
     }
 
     return true;
