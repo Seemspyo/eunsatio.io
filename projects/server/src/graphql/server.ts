@@ -69,7 +69,7 @@ export class GQLServer extends Koa {
                                 ctx.throw(401, 'NOT_ALLOWED');
                               }
 
-                              return origin
+                              return origin;
                             } : ctx => ctx.request.get('origin'),
                             allowMethods: 'GET,HEAD,OPTIONS,POST',
                             allowHeaders: [ 'Authorization', 'Content-Type' ],
@@ -79,7 +79,7 @@ export class GQLServer extends Koa {
 
     this
     .use( this.consumeAuth() )
-    .use( graphqlUploadKoa({ maxFileSize: 1e8, maxFiles: 12 }) ) // apollo-server-koa uses lower version of `fs-capacitor`
+    .use( graphqlUploadKoa({ maxFieldSize: 1e8 }) ) // apollo-server-koa uses lower version of `fs-capacitor`
     .use( graphql );
   }
 
