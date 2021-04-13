@@ -14,6 +14,7 @@ import { DashboardComponent } from './common/dashboard/dashboard.component';
 import { CommonPage } from './pages/common';
 
 import { LayoutStore } from './layout/layout.store';
+import { UploadAPI } from 'common/api/upload-api';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { LayoutStore } from './layout/layout.store';
     InventoryModule
   ],
   providers: [
-    LayoutStore
+    LayoutStore,
+    UploadAPI
   ]
 })
 export class MainModule { }

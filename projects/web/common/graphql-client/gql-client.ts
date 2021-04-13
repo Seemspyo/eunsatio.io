@@ -57,4 +57,40 @@ export class GQLClient {
     );
   }
 
+  // if wonder why implements multipart/form-data like this, see https://www.floriangaechter.com/blog/graphql-file-uploading/
+  public upload<T>(query: DocumentNode, variables: Record<string, File>, options?: AngularHttpOptions) {
+    const data = new FormData();
+
+    const
+    varMap: Record<string, [ string ]> = { },
+    altMap: Record<string, null> = { }
+
+    for (const key in variables) {
+      varMap[key] = [ `variables.${ key }` ]
+      altMap[key] = null;
+    }
+
+    data.append('operations', JSON.stringify({ query: print(query), variables: altMap }));
+    data.append('map', JSON.stringify(varMap));
+
+    // datas must follows `map` field. `graphql-upload` throws an error otherwise.
+    for (const key in variables) {
+      data.append(key, variables[key]);
+    }
+
+    return this.http.post<GQLResponse<T>>(this.config.uri, data, options).pipe(
+
+      map(res => {
+
+        if (res.errors?.length) {
+
+          throw this.config.errorPipe?.(res.errors) || res.errors;
+        }
+
+        return res.data!;
+      })
+
+    );
+  }
+
 }
