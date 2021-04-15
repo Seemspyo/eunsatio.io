@@ -1,0 +1,25 @@
+<div class="eun-select-display">
+
+  <div class="eun-select-display-value">
+    {{ getLabel() }}
+  </div>
+
+  <div class="eun-select-display-icon">
+    <fa-icon [icon]="icons.dropdown"></fa-icon>
+  </div>
+
+</div>
+
+<ng-template #OptionPanel>
+  <div
+    class="eun-select-option-panel"
+    tabindex="-1"
+    [@panelAnimation]="panelState"
+    (@panelAnimation.start)="_onPanelAnimation($event)"
+    (@panelAnimation.done)="_onPanelAnimation($event)"
+    [style.width.px]="_getHostWidth()"
+    (keydown)="_onPanelKeydown($event)"
+  >
+    <ng-content></ng-content>
+  </div>
+</ng-template>

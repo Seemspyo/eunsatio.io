@@ -1,0 +1,43 @@
+<label class="eun-form-field-label">
+
+  <ng-content select="eun-label"></ng-content>
+
+</label>
+
+<div class="eun-form-field-wrapper">
+
+  <div class="eun-form-field-prefix" *ngIf="_prefixChildren.length && (control.focused || control.value)">
+
+    <ng-content select="[eunPrefix]"></ng-content>
+
+  </div>
+
+  <div class="eun-form-field-control">
+
+    <ng-content></ng-content>
+
+  </div>
+
+  <div class="eun-form-field-suffix" *ngIf="_suffixChildren.length &&  (control.focused || control.value)">
+
+    <ng-content select="[eunSuffix]"></ng-content>
+
+  </div>
+
+</div>
+
+<div class="eun-form-field-message" [ngSwitch]="_getMessageType()">
+
+  <div class="eun-form-field-error" *ngSwitchCase="'error'">
+
+    <ng-content select="eun-error"></ng-content>
+
+  </div>
+
+  <div class="eun-form-field-tip" *ngSwitchCase="'tip'">
+
+    <ng-content select="eun-tip"></ng-content>
+
+  </div>
+
+</div>
