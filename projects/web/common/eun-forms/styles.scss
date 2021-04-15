@@ -3,6 +3,7 @@
   --eun-color-accent: #09c87c;
   --eun-color-error: #ff3434;
   --eun-color-text: #222222;
+  --eun-color-disabled: #e4e4e4;
   --eun-timing-function: cubic-bezier(0,.52,.26,1);
 }
 
@@ -40,6 +41,18 @@
     
     #{ $field }-label {
       background-color: var(--eun-color-error);
+    }
+
+  }
+
+  &-disabled {
+    pointer-events: none;
+    color: #8c8c8c;
+    --eun-form-field-shadow-color: var(--eun-color-disabled);
+    --eun-icon-color: var(--eun-color-disabled);
+    
+    #{ $field }-label {
+      background-color: var(--eun-color-disabled);
     }
 
   }
@@ -177,6 +190,12 @@
       background-color: rgba(#000, 0.1);
     }
 
+  }
+
+  &-disabled {
+    background-color: var(--eun-color-disabled);
+    color: #8c8c8c;
+    pointer-events: none;
   }
 
   &-selected {

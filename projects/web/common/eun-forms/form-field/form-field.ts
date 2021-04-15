@@ -28,7 +28,8 @@ import { EunTip } from './tip';
     'class': 'eun-form-field',
     '[class.eun-form-field-focused]': 'control.focused',
     '[class.eun-form-field-error]': 'control.hasError',
-    '[class.eun-form-field-float]': 'control.hasValue || control.focused'
+    '[class.eun-form-field-float]': 'control.hasValue || control.focused',
+    '[class.eun-form-field-disabled]': 'control.disabled'
   }
 })
 export class EunFormField implements AfterContentInit, AfterViewInit {
