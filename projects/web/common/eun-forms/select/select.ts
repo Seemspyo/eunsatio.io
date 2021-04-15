@@ -313,9 +313,28 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
 
   @HostListener('keydown', [ '$event' ])
   _onClickLike(event: KeyboardEvent) {
-    if (event.key.toLowerCase() === 'enter') {
+    if (hasModifierKey(event)) return;
 
-      this.openPanel();
+    const key = event.key.toLowerCase();
+
+    switch (key) {
+
+      case 'enter':
+        this.openPanel();
+        break;
+
+      case 'arrowup':
+      case 'arrowdown': {
+        if (!this.options.length) break;
+
+        let index = this.getFirstActiveItemIndex() + (key === 'arrowdown' ? +1 : -1);
+
+        if (index < 0) index = this.options.length - 1;
+        if (index >= this.options.length) index = 0;
+
+        this.selectOption(this.options.get(index)!, 'program');
+        break;
+      }
 
     }
   }
@@ -334,7 +353,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
       }
 
       default: {
-        if ([ 'arrowup', 'arrowdown' ].includes(event.key)) {
+        if ([ 'arrowup', 'arrowdown' ].includes(key)) {
 
           this.keyManager.setFocusOrigin('keyboard');
 
