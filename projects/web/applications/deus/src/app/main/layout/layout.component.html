@@ -1,4 +1,8 @@
-<header class="layout-header">
+<header
+  #headerRef
+  class="layout-header"
+  [class.layout-header-shrinked]="shouldHeaderShrink()"
+>
 
   <div class="layout-header-heading-container">
 
@@ -19,20 +23,29 @@
 
   <nav class="layout-header-nav">
 
-    <a
-      *ngFor="let nav of navigationDefs"
-      class="layout-header-nav-button"
-      [class.layout-header-nav-button-active]="!!nav.tree && isCurrentTree(nav.tree)"
-      [routerLink]="nav.link"
-      [queryParams]="nav.queryParams"
-      [queryParamsHandling]="nav.queryParamsHandling"
-      [fragment]="nav.fragment"
-      [preserveFragment]="nav.preserveFragment || false"
-    >{{ nav.label }}</a>
+    <swiper
+      slidesPerView="auto"
+      [watchOverflow]="true"
+      [initialSlide]="getCurrentNavIndex()"
+      class="layout-header-nav-wrapper"
+    >
+      <ng-template swiperSlide *ngFor="let nav of navigationDefs; let i = index">
+        <a
+          class="layout-header-nav-button"
+          [class.layout-header-nav-button-active]="!!nav.tree && isCurrentTree(nav.tree)"
+          [routerLink]="nav.link"
+          [queryParams]="nav.queryParams"
+          [queryParamsHandling]="nav.queryParamsHandling"
+          [fragment]="nav.fragment"
+          [preserveFragment]="nav.preserveFragment || false"
+          (click)="swiperInstance.slideTo(i)"
+        >{{ nav.label }}</a>
+      </ng-template>
+    </swiper>
 
   </nav>
 
-  <div class="layout-header-menu">
+  <div class="layout-header-menu" #menuRef>
     <button
       class="layout-header-menu-button layout-shadow-focus"
       type="button"
@@ -101,6 +114,7 @@
             [queryParamsHandling]="asRouter(node).queryParamsHandling"
             [fragment]="asRouter(node).fragment"
             [preserveFragment]="asRouter(node).preserveFragment || false"
+            [attr.title]="node.label"
           >
             <ng-container *ngTemplateOutlet="NodeContent; context: { $implicit: node }"></ng-container>
           </a>
@@ -110,6 +124,7 @@
             class="layout-side-node-button"
             [href]="asOuter(node).href"
             [target]="asOuter(node).target"
+            [attr.title]="node.label"
           >
             <ng-container *ngTemplateOutlet="NodeContent; context: { $implicit: node }"></ng-container>
           </a>
@@ -118,6 +133,7 @@
             *ngSwitchCase="'action'"
             class="layout-side-node-button"
             (click)="asAction(node).action($event)"
+            [attr.title]="node.label"
           >
             <ng-container *ngTemplateOutlet="NodeContent; context: { $implicit: node }"></ng-container>
           </button>

@@ -1,8 +1,12 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
+  Inject,
   OnInit,
+  PLATFORM_ID,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
@@ -39,6 +43,10 @@ import {
 } from '@eunsatio.io/server';
 import { trigger } from '@angular/animations';
 import { fadeEnter, fadeLeave } from 'common/animations/fade';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { fromEvent } from 'rxjs';
+import { isPlatformServer } from '@angular/common';
+import { SwiperComponent } from 'swiper/angular';
 
 
 type DrawerState = 'expanded'|'collapsed';
@@ -62,7 +70,7 @@ type DrawerState = 'expanded'|'collapsed';
     ])
   ]
 })
-export class LayoutComponent implements OnInit {
+export class LayoutComponent implements OnInit, AfterViewInit {
 
   public readonly icons = {
     title: faCog,
@@ -83,7 +91,24 @@ export class LayoutComponent implements OnInit {
 
   private processing = false;
 
-  @ViewChild(InventorySwitch) inventorySwitch!: InventorySwitch;
+  private isServer!: boolean;
+
+  @ViewChild(InventorySwitch)
+  inventorySwitch!: InventorySwitch;
+
+  @ViewChild('headerRef')
+  headerElRef!: ElementRef<HTMLElement>;
+
+  @ViewChild('menuRef')
+  menuElRef!: ElementRef<HTMLElement>;
+
+  @ViewChild(SwiperComponent)
+  swiperRef!: SwiperComponent;
+
+  get swiperInstance() {
+
+    return this.swiperRef.swiperRef;
+  }
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -94,8 +119,12 @@ export class LayoutComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private subscription: SubscriptionContainer,
-    private store: LayoutStore
-  ) { }
+    private store: LayoutStore,
+    private layoutObserver: BreakpointObserver,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isServer = isPlatformServer(platformId);
+  }
 
   ngOnInit() {
     this.navigationDefs = this.createNavByRoles(this.authAPI.me!.roles);
@@ -120,6 +149,36 @@ export class LayoutComponent implements OnInit {
       })
 
     );
+  }
+
+  ngAfterViewInit() {
+    if (this.isServer) return;
+
+    this.subscription.add(
+
+      // to prevent header being overflowed(.layout-header-shrinked).
+      fromEvent(window, 'resize').subscribe(() => this.changeDetector.markForCheck()),
+
+      this.layoutObserver.observe([ '(max-width: 768px)' ]).subscribe(result => {
+        if (result.matches) {
+
+          if (this.drawerState === 'expanded') {
+            this.markDrawerState('collapsed');
+          }
+
+        } else {
+
+          if (this.drawerState === 'collapsed') {
+            this.markDrawerState('expanded');
+          }
+
+        }
+      })
+
+    );
+    this.changeDetector.detectChanges();
+
+    setTimeout(() => this.swiperInstance.update()); // update after render
   }
 
   // no needs to navigate manually since parent component took care of auth states
@@ -149,6 +208,32 @@ export class LayoutComponent implements OnInit {
 
     this.inventorySwitch.dispose();
     this.flipBar.open(`${ this.user.username }님 안녕히가세요.`);
+  }
+
+  public shouldHeaderShrink() {
+    if (this.isServer || !this.headerElRef?.nativeElement) { // for ssr and before view init
+
+      return false;
+    }
+
+    /**
+     * title and nav item's width can be retrieved like `getComputedStyle(el, '--side-width')`,
+     * but changing css variable means application itself should be rebuilt.
+     * remove unnecessary calculation for performance reason.
+     * NOTE: This values should be updated with ./layout.component.scss
+     */
+    const
+    headerWidth = this.headerElRef.nativeElement.getBoundingClientRect().width,
+    titleWidth = 254,
+    navItemWidth = 184,
+    menuWidth = this.menuElRef!.nativeElement.getBoundingClientRect().width;
+
+    return headerWidth - titleWidth - menuWidth < navItemWidth * this.navigationDefs.length;
+  }
+
+  public getCurrentNavIndex() {
+
+    return this.navigationDefs.findIndex(nav => !!nav.tree && this.isCurrentTree(nav.tree));
   }
 
   // public toggleChildTree(node: Drawer) {

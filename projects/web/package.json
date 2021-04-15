@@ -33,6 +33,7 @@
     "@fortawesome/angular-fontawesome": "^0.8.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "swiper": "^6.5.6",
     "tslib": "^2.1.0",
     "zone.js": "^0.11.4"
   }
