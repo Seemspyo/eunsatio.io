@@ -1,8 +1,6 @@
 @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap);
 @import '~@angular/cdk/overlay-prebuilt.css';
 @import '~swiper/swiper';
-@import '~swiper/components/a11y/a11y';
-@import '~swiper/components/navigation/navigation';
 @import 'common/@utils';
 @import 'common/eun-forms/styles';
 
@@ -35,11 +33,9 @@ li { list-style-type: none; }
   --flip-bar-font-size: 16px;
   --flip-bar-progress-color: var(--color-accent);
 
+  --eun-color-accent: var(--color-accent);
+  --eun-color-error: rgb(240, 90, 20);
+
   color: var(--color-text);
 
-}
-
-button:disabled {
-  background-color: var(--color-inactive);
-  pointer-events: none;
 }

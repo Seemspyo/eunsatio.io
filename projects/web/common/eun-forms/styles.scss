@@ -1,23 +1,23 @@
-:root {
-  --eun-color-field-background: #ffffff;
-  --eun-color-accent: #09c87c;
-  --eun-color-error: #ff3434;
-  --eun-color-text: #222222;
-  --eun-color-disabled: #e4e4e4;
-  --eun-timing-function: cubic-bezier(0,.52,.26,1);
+.eun-styles {
+  --color-field-background: var(--eun-color-field-background, #ffffff);
+  --color-accent: var(--eun-color-accent, #09c87c);
+  --color-error: var(--eun-color-error, #ff3434);
+  --color-text: var(--eun-color-text, #222222);
+  --color-disabled: var(--eun-color-disabled, #e4e4e4);
+  --timing-function: var(--eun-timing-function, cubic-bezier(0,.52,.26,1));
 }
 
 .eun-form-field {
   display: inline-flex;
   flex-direction: column;
   width: 180px;
-  color: var(--eun-color-text);
+  color: var(--color-text);
   position: relative;
   padding: 0 5px;
 
   $field: &;
-  --eun-form-field-shadow-color: var(--eun-color-accent);
-  --eun-icon-color: var(--eun-color-accent);
+  --form-field-shadow-color: var(--color-accent);
+  --icon-color: var(--color-accent);
 
   &-float {
 
@@ -30,17 +30,17 @@
   &-focused {
 
     #{ $field }-wrapper {
-      box-shadow: 5px 5px 0 var(--eun-form-field-shadow-color);
+      box-shadow: 5px 5px 0 var(--form-field-shadow-color);
     }
 
   }
 
   &-error {
-    --eun-form-field-shadow-color: var(--eun-color-error);
-    --eun-icon-color: var(--eun-color-error);
+    --form-field-shadow-color: var(--color-error);
+    --icon-color: var(--color-error);
     
     #{ $field }-label {
-      background-color: var(--eun-color-error);
+      background-color: var(--color-error);
     }
 
   }
@@ -48,11 +48,11 @@
   &-disabled {
     pointer-events: none;
     color: #8c8c8c;
-    --eun-form-field-shadow-color: var(--eun-color-disabled);
-    --eun-icon-color: var(--eun-color-disabled);
+    --form-field-shadow-color: var(--color-disabled);
+    --icon-color: var(--color-disabled);
     
     #{ $field }-label {
-      background-color: var(--eun-color-disabled);
+      background-color: var(--color-disabled);
     }
 
   }
@@ -74,9 +74,9 @@
     transition: {
       property: background-color, transform;
       duration: 0.4s;
-      timing-function: var(--eun-timing-function);
+      timing-function: var(--timing-function);
     }
-    background-color: var(--eun-color-accent);
+    background-color: var(--color-accent);
     line-height: 1;
     color: #ffffff;
     z-index: 1;
@@ -88,9 +88,9 @@
     display: flex;
     position: relative;
     padding: 6px;
-    background-color: var(--eun-color-field-background);
-    box-shadow: 2px 2px 0 var(--eun-form-field-shadow-color);
-    transition: box-shadow 0.4s var(--eun-timing-function);
+    background-color: var(--color-field-background);
+    box-shadow: 2px 2px 0 var(--form-field-shadow-color);
+    transition: box-shadow 0.4s var(--timing-function);
   }
 
   &-prefix, &-suffix {
@@ -123,7 +123,7 @@
 }
 
 .eun-error {
-  color: var(--eun-color-error);
+  color: var(--color-error);
 }
 
 .eun-select {
@@ -149,7 +149,7 @@
 
     &-icon {
       flex-shrink: 0;
-      color: var(--eun-icon-color);
+      color: var(--icon-color);
       padding: 0 4px;
     }
 
@@ -159,7 +159,7 @@
     width: 100%; height: 100%;
     max-height: 256px;
     outline: none;
-    background-color: var(--eun-color-field-background);
+    background-color: var(--color-field-background);
     box-shadow: 0 4px 8px rgba(#000, 0.2);
   }
 
@@ -174,7 +174,7 @@
     size: 14px;
     weight: 300;
   }
-  color: var(--eun-color-text);
+  color: var(--color-text);
   cursor: pointer;
   outline: none;
 
@@ -193,13 +193,13 @@
   }
 
   &-disabled {
-    background-color: var(--eun-color-disabled);
+    background-color: var(--color-disabled);
     color: #8c8c8c;
     pointer-events: none;
   }
 
   &-selected {
-    background-color: var(--eun-color-accent);
+    background-color: var(--color-accent);
     color: #fff;
   }
 

@@ -56,7 +56,9 @@ import { panelAnimation } from './select-animations';
     SubscriptionContainer
   ]
 })
-export class EunSelect implements EunFormControl<any>, ControlValueAccessor, AfterContentInit, OnChanges, OnDestroy {
+export class EunSelect
+implements EunFormControl<any>, ControlValueAccessor, AfterContentInit, OnChanges, OnDestroy
+{
 
   public icons = {
     dropdown: faCaretSquareDown
@@ -81,6 +83,8 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
 
     } else {
 
+      (this.selection as EunOption[]).slice(1).forEach(option => option.selected = false);
+
       this.value = this.value[0];
       this.selection = (this.selection as EunOption[])[0] || null;
 
@@ -98,8 +102,31 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
   set value(value: any) {
     if (this.value === value) return;
 
-    this._value = this.multiple ? value || [] : value;
+    if (this.isSelectionIterable(this.selection)) {
+
+      this._value = value || []
+
+      if (Array.isArray(this.value)) {
+        this.selection = this.value && this.options?.filter(option => {
+
+          return option.selected = this.value.includes(option.value);
+        }) || null;
+        this.value = this.selection?.map(option => option.value);
+      }
+
+    } else {
+
+      if (this.selection) this.selection.selected = false;
+
+      this._value = value;
+      this.selection = this.options?.find(option => option.value === this.value) || null;
+
+      if (this.selection) this.selection.selected = true;
+
+    }
+
     this.mutation.next();
+    this.changeDetector.markForCheck();
   }
   private _value: any;
 
@@ -119,6 +146,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
     if (this.readonly === value) return;
 
     this._readonly = value;
+    this.changeDetector.markForCheck();
   }
   private _readonly = false;
 
@@ -133,6 +161,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
     if (this.required === value) return;
 
     this._required = value;
+    this.changeDetector.markForCheck();
   }
   private _required = false;
 
@@ -147,8 +176,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
     if (this.disabled === value) return;
 
     this._disabled = value;
-
-    if (this.disabled) {}
+    this.changeDetector.markForCheck();
   }
   private _disabled = false;
 
@@ -183,7 +211,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
   private closePanelBy: FocusOrigin = null;
 
   @ContentChildren(EunOption, { descendants: true })
-  options!: QueryList<EunOption>;
+  options?: QueryList<EunOption>;
   private keyManager!: FocusKeyManager<EunOption>;
 
   constructor(
@@ -212,7 +240,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
 
   ngAfterContentInit() {
     { // set focus key manager
-      this.keyManager = new FocusKeyManager(this.options)
+      this.keyManager = new FocusKeyManager(this.options!)
                         .withWrap()
                         .withTypeAhead()
                         .withHomeAndEnd()
@@ -224,20 +252,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
 
     { // set options
       this.watchOptionSelect();
-      this.options.changes.subscribe(() => this.watchOptionSelect());
-
-      if (this.multiple) {
-
-        if (Array.isArray(this.value)) {
-          this.selection = this.value && this.options.filter(option => this.value.includes(option.value)) || null;
-          this.value = this.selection.map(option => option.value);
-        }
-
-      } else {
-
-        this.selection = this.options.find(option => option.value === this.value) || null;
-
-      }
+      this.options!.changes.subscribe(() => this.watchOptionSelect());
     }
   }
 
@@ -325,14 +340,14 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
 
       case 'arrowup':
       case 'arrowdown': {
-        if (!this.options.length) break;
+        if (!this.options!.length) break;
 
         let index = this.getFirstActiveItemIndex() + (key === 'arrowdown' ? +1 : -1);
 
-        if (index < 0) index = this.options.length - 1;
-        if (index >= this.options.length) index = 0;
+        if (index < 0) index = this.options!.length - 1;
+        if (index >= this.options!.length) index = 0;
 
-        this.selectOption(this.options.get(index)!, 'program');
+        this.selectOption(this.options!.get(index)!, 'program');
         break;
       }
 
@@ -480,7 +495,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
 
     this.subscription.add(
 
-      ...this.options.map(option => option.selectEvent.subscribe(event => this.selectOption(option, event.selectBy)))
+      ...this.options!.map(option => option.selectEvent.subscribe(event => this.selectOption(option, event.selectBy)))
 
     );
   }
@@ -531,7 +546,7 @@ export class EunSelect implements EunFormControl<any>, ControlValueAccessor, Aft
   private getFirstActiveItemIndex() {
     const selection: EunOption|null = this.isSelectionIterable(this.selection) ? this.selection[0] : this.selection;
 
-    return this.options.reduce((index, option, i) => {
+    return this.options!.reduce((index, option, i) => {
 
       return option === selection ? i : index;
     }, -1);

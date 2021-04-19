@@ -1,0 +1,107 @@
+@import '../@utils.scss';
+
+
+.paginator {
+  width: 100%;
+  display: block;
+  background-color: var(--paginator-color-background, #2c343f);
+
+  &-page {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    font-size: 1.2em;
+
+    &-console {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+
+      &-button {
+        background-color: transparent;
+        color: var(--paginator-color-button, #efefef);
+
+        &:not(:first-of-type) {
+          margin-left: 0.4em;
+        }
+
+        &:disabled {
+          background-color: transparent;
+          color: var(--paginator-color-disabled, #7f7f7f);
+          pointer-events: none;
+        }
+
+      }
+
+    }
+
+    &-wrapper {
+      display: flex;
+      padding: 0 0.8em;
+      margin: 0 auto;
+      width: 0;
+      flex: auto;
+      text-align: center;
+
+      .swiper-container {
+        display: inline-block;
+        max-width: 100%;
+      }
+
+      .swiper-slide {
+        width: auto;
+      }
+
+    }
+
+    &-button {
+      display: block;
+      font: {
+        size: 0.8em;
+        weight: 300;
+      }
+      padding: 0 0.4em;
+      color: var(--paginator-color-button, #efefef);
+      transition: background-color 0.3s;
+      outline: none;
+
+      &:focus {
+        background-color: var(--paginator-color-focus, rgba(#09c87c, 0.4));
+      }
+
+      &-active {
+        background-color: var(--paginator-color-accent, #09c87c);
+        color: var(--paginator-color-button-active, #fff);
+      }
+
+    }
+
+  }
+
+  &-console {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 24px;
+    font-size: 0.8em;
+
+    &-item {
+      display: flex;
+      align-items: center;
+      margin-left: 0.4em;
+    }
+
+    &-label, &-display {
+      color: var(--paginator-color-text, #8c8c8c);
+    }
+
+    &-input {
+      width: 80px;
+    }
+
+  }
+
+}

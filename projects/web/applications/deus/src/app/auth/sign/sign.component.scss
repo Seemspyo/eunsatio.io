@@ -12,6 +12,11 @@
   transition: background-size 0s 0.5s; // for animation delay
   background-size: 0 0;
 
+  button:disabled {
+    background-color: var(--color-inactive);
+    pointer-events: none;
+  }
+
   &-processing {
     position: fixed;
     top: 0; left: 0;

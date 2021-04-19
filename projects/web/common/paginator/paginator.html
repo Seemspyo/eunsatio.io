@@ -1,0 +1,109 @@
+<div class="paginator-page">
+
+  <div class="paginator-page-console">
+
+    <button
+      *ngIf="!hideFirstLastButton"
+      class="paginator-page-console-button"
+      type="button"
+      (click)="setPageIndex(0)"
+      [disabled]="pageIndex === 0"
+    >
+      <fa-icon [icon]="icons.first"></fa-icon>
+    </button>
+
+    <button
+      *ngIf="!hidePrevNextButton"
+      class="paginator-page-console-button"
+      type="button"
+      (click)="setPageIndex(pageIndex - 1)"
+      [disabled]="pageIndex === 0"
+    >
+      <fa-icon [icon]="icons.prev"></fa-icon>
+    </button>
+
+  </div>
+
+  <div class="paginator-page-wrapper">
+
+    <swiper
+      slidesPerView="auto"
+      [watchOverflow]="true"
+      [centeredSlides]="true"
+      [centeredSlidesBounds]="true"
+      [scrollbar]="{ draggable: true }"
+      [initialSlide]="pageIndex"
+    >
+
+      <ng-template swiperSlide *ngFor="let n of _getPageIterator();let i = index">
+
+        <button
+          class="paginator-page-button"
+          [class.paginator-page-button-active]="pageIndex === i"
+          [disabled]="pageIndex === i"
+          type="button"
+          (click)="setPageIndex(i)"
+        >{{ n }}</button>
+
+      </ng-template>
+    
+    </swiper>
+
+  </div>
+
+  <div class="paginator-page-console">
+
+    <button
+      *ngIf="!hidePrevNextButton"
+      class="paginator-page-console-button"
+      type="button"
+      (click)="setPageIndex(pageIndex + 1)"
+      [disabled]="pageIndex === _getMaxPageIndex()"
+    >
+      <fa-icon [icon]="icons.next"></fa-icon>
+    </button>
+
+    <button
+      *ngIf="!hideFirstLastButton"
+      class="paginator-page-console-button"
+      type="button"
+      (click)="setPageIndex(_getMaxPageIndex())"
+      [disabled]="pageIndex === _getMaxPageIndex()"
+    >
+      <fa-icon [icon]="icons.last"></fa-icon>
+    </button>
+
+  </div>
+
+</div>
+
+<div class="paginator-console" *ngIf="!hideConsole">
+
+  <div class="paginator-console-item" *ngIf="!hideGoTo">
+    <span class="paginator-console-label">{{ options.goToLabel }}:</span>
+    <eun-form-field class='paginator-console-input'>
+      <input
+        #goToInput
+        eunInput
+        type="number"
+        min="0"
+        [attr.max]="_getMaxPageIndex()"
+        (change)="pageIndex = _coerceNumber(goToInput.value) - 1"
+      >
+    </eun-form-field>
+  </div>
+
+  <div class="paginator-console-item" *ngIf="!hideSizeOption && pageSizeOptions.length">
+    <span class='paginator-console-label'>{{ options.sizeOptionLabel }}:</span>
+    <eun-form-field class="paginator-console-input">
+      <eun-select [(ngModel)]="pageSize">
+        <eun-option *ngFor="let size of pageSizeOptions" [value]="size">{{ size | number }}</eun-option>
+      </eun-select>
+    </eun-form-field>
+  </div>
+
+  <div class="paginator-console-item" *ngIf="!hideDisplay">
+    <span class="paginator-console-display">{{ options.formatLabel(pageIndex, pageSize, pageLength) }}</span>
+  </div>
+
+</div>

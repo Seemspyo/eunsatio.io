@@ -14,6 +14,7 @@ import { merge } from 'rxjs';
 import { EunError } from './error';
 import { EunFormControl } from './form-control';
 import { EunFormMissingControlError } from './form-errors';
+import { EunLabel } from './label';
 import { EunPrefix } from './prefix';
 import { EunSuffix } from './suffix';
 import { EunTip } from './tip';
@@ -25,7 +26,7 @@ import { EunTip } from './tip';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'eun-form-field',
+    'class': 'eun-form-field eun-styles',
     '[class.eun-form-field-focused]': 'control.focused',
     '[class.eun-form-field-error]': 'control.hasError',
     '[class.eun-form-field-float]': 'control.hasValue || control.focused',
@@ -33,6 +34,9 @@ import { EunTip } from './tip';
   }
 })
 export class EunFormField implements AfterContentInit, AfterViewInit {
+
+  @ContentChild(EunLabel)
+  _labelChild?: EunLabel;
 
   @ContentChildren(EunPrefix)
   _prefixChildren!: QueryList<EunPrefix>;
