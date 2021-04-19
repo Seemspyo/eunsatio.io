@@ -101,32 +101,11 @@ implements EunFormControl<any>, ControlValueAccessor, AfterContentInit, OnChange
   }
   set value(value: any) {
     if (this.value === value) return;
-
-    if (this.isSelectionIterable(this.selection)) {
-
-      this._value = value || []
-
-      if (Array.isArray(this.value)) {
-        this.selection = this.value && this.options?.filter(option => {
-
-          return option.selected = this.value.includes(option.value);
-        }) || null;
-        this.value = this.selection?.map(option => option.value);
-      }
-
-    } else {
-
-      if (this.selection) this.selection.selected = false;
-
-      this._value = value;
-      this.selection = this.options?.find(option => option.value === this.value) || null;
-
-      if (this.selection) this.selection.selected = true;
-
-    }
+    
+    this._value = value ?? (this.multiple ? [] : null);
+    this.forceSync();
 
     this.mutation.next();
-    this.changeDetector.markForCheck();
   }
   private _value: any;
 
@@ -254,6 +233,8 @@ implements EunFormControl<any>, ControlValueAccessor, AfterContentInit, OnChange
       this.watchOptionSelect();
       this.options!.changes.subscribe(() => this.watchOptionSelect());
     }
+
+    this.forceSync();
   }
 
   ngOnChanges() {
@@ -550,6 +531,30 @@ implements EunFormControl<any>, ControlValueAccessor, AfterContentInit, OnChange
 
       return option === selection ? i : index;
     }, -1);
+  }
+
+  private forceSync() {
+    if (this.isSelectionIterable(this.selection)) {
+
+      if (Array.isArray(this.value)) {
+        this.selection = this.value && this.options?.filter(option => {
+
+          return option.selected = this.value.includes(option.value);
+        }) || null;
+        this.value = this.selection?.map(option => option.value);
+      }
+
+    } else {
+
+      if (this.selection) this.selection.selected = false;
+
+      this.selection = this.options?.find(option => option.value === this.value) || null;
+
+      if (this.selection) this.selection.selected = true;
+
+    }
+
+    this.changeDetector.markForCheck();
   }
 
 }
