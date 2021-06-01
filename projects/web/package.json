@@ -15,13 +15,13 @@
     "deus:build:prod": "ng build deus --prod",
     "deus:build:ssr": "ng run deus:server",
     "deus:watch:ssr": "ng run deus:server --watch",
-    "deus:build:ssr:prod": "ng run deus:server:prod",
+    "deus:build:ssr:prod": "ng run deus:server:production",
     "blog:build": "ng build blog",
     "blog:watch": "ng build blog --watch",
     "blog:build:prod": "ng build blog --prod",
     "blog:build:ssr": "ng run blog:server",
     "blog:watch:ssr": "ng run blog:server --watch",
-    "blog:build:ssr:prod": "ng run blog:server:prod"
+    "blog:build:ssr:prod": "ng run blog:server:production"
   },
   "private": true,
   "dependencies": {
